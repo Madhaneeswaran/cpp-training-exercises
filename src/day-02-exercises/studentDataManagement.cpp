@@ -1,4 +1,5 @@
 #include <iostream>
+#include <memory>
 #include <string>
 
 struct Student {
@@ -28,8 +29,7 @@ int main() {
     std::cin >> numberOfStudents;
     std::string searchInput;
 
-    Student* students = new Student[numberOfStudents]; // dynamically allocate students
-
+    std::unique_ptr<Student[]> students = std::make_unique<Student[]>(numberOfStudents);
     for (int i = 0; i < numberOfStudents; i++) {
         std::cin.ignore();
 
@@ -47,7 +47,7 @@ int main() {
     std::cout << "Enter student name to search: ";
     std::getline(std::cin, searchInput);
 
-    searchStudent(students, numberOfStudents, searchInput);
+    searchStudent(students.get(), numberOfStudents, searchInput);
 
-    delete[] students;
+    return 0;
 }
