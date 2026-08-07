@@ -3,17 +3,17 @@
 
 struct Student {
     std::string name;
-    double rollNumber;
+    int rollNumber;
     int rank;
 };
 
-void searchStudent(const Student students[], int size, const std::string searchInput) {
+void searchStudent(const Student students[], int size, const std::string& searchInput) {
     bool found = false;
     for (int i = 0; i < size; i++) {
         if (students[i].name == searchInput) {
             std::cout << "Found: " << students[i].name
-                    << ", Roll " << students[i].rollNumber
-                    << ", Rank " << students[i].rank << "\n";
+                    << ", Roll number: " << students[i].rollNumber
+                    << ", Rank: " << students[i].rank << "\n";
             found = true;
             break;
         }
@@ -26,6 +26,7 @@ int main() {
     int numberOfStudents;
     std::cout << "Enter number of students :- ";
     std::cin >> numberOfStudents;
+    std::string searchInput;
 
     Student* students = new Student[numberOfStudents]; // dynamically allocate students
 
@@ -43,7 +44,6 @@ int main() {
     }
 
     std::cin.ignore();
-    std::string searchInput;
     std::cout << "Enter student name to search: ";
     std::getline(std::cin, searchInput);
 
