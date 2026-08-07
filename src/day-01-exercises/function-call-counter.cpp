@@ -8,12 +8,11 @@ void counter() {
 }
 
 int main() {
-    counter();
-    counter();
-    counter();
-    counter();
-    counter();
-    counter();
+    const int max_call = 5;
+
+    for (int i = 0; i < max_call; i++) {
+        counter();
+    }
     
     return 0;
 }
