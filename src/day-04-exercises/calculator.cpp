@@ -62,12 +62,12 @@ int main() {
         } else if (userInput == "divide") {
             std::cout << divide(num1, num2) << '\n';
         } else {
-            throw std::invalid_argument("Invalid argument - Enter add / subtract / multiply / divide");
+            throw std::invalid_argument("Enter add / subtract / multiply / divide");
         }
     } catch (const InvalidInputError& e) {
         std::cerr << "Error [" << e.code() << "]: " << e.what() << '\n';
     } catch (const std::invalid_argument& e) {
-        std::cerr << e.what() << "\n";
+        std::cerr << "Invalid argument - " << e.what() << "\n";
     }
 
     return 0;
