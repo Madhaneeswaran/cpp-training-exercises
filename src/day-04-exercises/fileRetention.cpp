@@ -14,7 +14,7 @@ namespace fs = std::filesystem;
 const uintmax_t FILE_SIZE_LIMIT = 2 * 1024 * 1024;      // 2 MB
 const size_t TWENTY_MB = 10 * FILE_SIZE_LIMIT;          // 20 MB 
 const fs::path LOGS_DIR = "logs";
-const int FILES_TO_DELETE = 3;
+const int FILES_TO_DELETE = 5;
 
 // Structure to pair file path with its modification time
 struct LogFileInfo {
@@ -22,7 +22,7 @@ struct LogFileInfo {
     fs::file_time_type writeTime;
 };
 
-class Logger {
+class FileRetentionLogger {
     private:
         fs::path folderPath;
         uintmax_t maxFolderSize;
@@ -54,7 +54,7 @@ class Logger {
         uintmax_t calculateFolderSize() {
             uintmax_t totalSize = 0;
 
-            for (const auto& entry : fs::directory_iterator(LOGS_DIR)) {
+            for (const auto& entry : fs::directory_iterator(folderPath)) {
                 if (fs::is_regular_file(entry.path())) {
                     uintmax_t size = fs::file_size(entry.path());
                     totalSize += size;
@@ -67,7 +67,7 @@ class Logger {
         void cleanOldestFiles() {
             std::vector<LogFileInfo> files;
 
-            for (const auto& entry : fs::directory_iterator(LOGS_DIR)) {
+            for (const auto& entry : fs::directory_iterator(folderPath)) {
                 if (fs::is_regular_file(entry.path())) {
                     files.push_back({entry.path(), fs::last_write_time(entry.path())});
                 }
@@ -100,9 +100,9 @@ class Logger {
         }
 
     public:
-        Logger(fs::path logsDir = LOGS_DIR, uintmax_t folderLimit = TWENTY_MB) : folderPath(logsDir), maxFolderSize(folderLimit) {}
+        FileRetentionLogger(fs::path logsDir = LOGS_DIR, uintmax_t folderLimit = TWENTY_MB) : folderPath(logsDir), maxFolderSize(folderLimit) {}
 
-        bool buildFolder() {
+        bool createFolder() {
             try {
                 fs::create_directory(folderPath);
                 currentLogFile = folderPath / ("logs_" + getTimestamp() + ".txt");
@@ -114,7 +114,7 @@ class Logger {
 
         }
 
-        void log() {
+        void initiateLogging() {
             try {
                 std::ofstream logFile(currentLogFile, std::ios::app);
 
@@ -132,16 +132,16 @@ class Logger {
 };
 
 int main () {
-    Logger loggerObj(LOGS_DIR, TWENTY_MB);
+    FileRetentionLogger logger(LOGS_DIR, TWENTY_MB);
 
-    if (!loggerObj.buildFolder()) {
-        std::cerr << "Error running ... \n";
+    if (!logger.createFolder()) {
+        std::cerr << "Error creating folder ... \n";
 
         return 1;
     }
 
     while (true) {
-        loggerObj.log();
+        logger.initiateLogging();
     }
 
     return 0;
