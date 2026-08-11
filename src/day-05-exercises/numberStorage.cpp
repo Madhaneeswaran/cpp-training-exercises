@@ -1,5 +1,6 @@
 #include <iostream>
 #include <set>
+#include <string>
 
 int main() {
     std::set<double> uniqueNumbers;
@@ -14,10 +15,11 @@ int main() {
             }
     
             double doubleNum = std::stod(userInput);
-            
             uniqueNumbers.insert(doubleNum);
         } catch (const std::invalid_argument& e) {
-            std::cerr << "Invalid input \n";
+            std::cerr << "Error: " << e.what() << "\n";
+        } catch (const std::out_of_range& e) {
+            std::cerr << "Error: " << e.what() << "\n";
         }
     }
 
