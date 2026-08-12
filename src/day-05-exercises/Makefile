@@ -1,6 +1,5 @@
-CXX		:= g++
-CXXFLAGS	:= -std=c++17 -Wall -Wextra
-
+CXX		 := g++
+CXXFLAGS := -std=c++17 -Wall -Wextra
 OUT_DIR  := output
 
 SRCS     := $(wildcard *.cpp)
