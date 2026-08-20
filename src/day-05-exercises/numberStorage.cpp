@@ -7,9 +7,8 @@ int main() {
     std::string userInput;
     std::cout << "Enter numbers. Type 'exit' to stop:\n";
 
-    while(true) {
+    while(std::cin >> userInput) {
         try {
-            std::cin >> userInput;
             if (userInput == "exit") {
                 break; 
             }
@@ -21,6 +20,12 @@ int main() {
         } catch (const std::out_of_range& e) {
             std::cerr << "Error: " << e.what() << "\n";
         }
+    }
+
+    if (std::cin.eof()) {
+        std::cout << "Stream reached End-of-File (EOF). Exiting cleanly.\n";
+    } else if (std::cin.fail()) {
+        std::cerr << "Stream encountered a parsing failure.\n";
     }
 
     std::cout << "\n--- Program Stopped ---" << std::endl;
