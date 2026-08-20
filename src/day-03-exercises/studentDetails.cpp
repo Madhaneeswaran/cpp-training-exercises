@@ -1,25 +1,24 @@
 #include <iostream>
 #include <string>
+#include <memory>
 
 class Person {    
-    public:
+    protected:
         std::string name;
         int age;
+    
+    public:
+        Person(const std::string& name, int age): name(name), age(age) {}
 
-        Person(const std::string& name, int age) {
-            this->name = name;
-            this->age = age;
-        }
-
-        void Show_Name() {
+        void Show_Name() const {
             std::cout << "The Name is " << name << '\n';
         }
 
-        void Show_Details() {
+        virtual void Show_Details() {
             std::cout << "The Name is " << name << ". He/She is " << age << " years old. \n";
         }
 
-        ~Person() {
+        virtual ~Person() {
             std::cout << "Person Destructor \n";
         }
 };
@@ -31,7 +30,7 @@ class Student : public Person {
     public:
         Student(const std::string& qua, const std::string& name, int age) : Person(name, age), qualification(qua){}
 
-        void Show_Details() {
+        void Show_Details() override {
             std::cout << "The Name is " << name << ". He/She is " << age << " years old. His/Her Qualification is " << qualification << '\n';
         }
 
@@ -41,9 +40,11 @@ class Student : public Person {
 };
 
 int main () {
-    Student student1("1st Grade", "Disham", 6);
+    auto student1 = std::make_unique<Student>("1st Grade", "Disham", 6);
 
-    student1.Show_Details();
+    student1->Show_Name();
+
+    student1->Show_Details();
 
     return 0;
 }

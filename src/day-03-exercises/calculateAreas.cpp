@@ -1,18 +1,27 @@
 #include <iostream>
-#include <cmath> 
+#include <numbers>
 
 class Shapes {
     public: 
-        virtual double Calculate_Area() = 0;
+        virtual double Calculate_Area() const = 0;
+
+        virtual ~Shapes() {
+            std::cout << "Shapes Destructor \n";
+        }
 };
 
 class Square : public Shapes {
     private:
         double side;
+    
     public:
-        Square(double s) : side(s) {}
+        Square(double s) : side(s) {
+            if (side < 0) {
+                throw std::invalid_argument("Square side length cannot be negative: " + std::to_string(side));
+            }
+        }
 
-        double Calculate_Area() override {
+        double Calculate_Area() const override {
             return (side * side);
         }
 };
@@ -20,17 +29,22 @@ class Square : public Shapes {
 class Circle : public Shapes {
     private:
         double radius;
+    
     public:
-        Circle(double r) : radius(r) {}
+        Circle(double r) : radius(r) {
+            if (radius < 0) {
+                throw std::invalid_argument("Circle radius cannot be negative: " + std::to_string(radius));
+            }
+        }
 
-        double Calculate_Area() override {
-            double pi = M_PI; 
+        double Calculate_Area() const override {
+            double pi = std::numbers::pi; 
             return (pi * radius * radius);
         }
 };
 
 int main() {
-    Shapes *shape;
+    Shapes* shape;
 
     Circle c(4);
 
