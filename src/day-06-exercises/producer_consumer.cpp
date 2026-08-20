@@ -56,30 +56,34 @@ void consumer() {
     
         if (item.operation == "stop") {
             buffer.clear();
-            std::cout << "[INFO] 'stop' received - queue flushed, shutting down.\n";
         } else {
-            if (item.operation == "add") {
-                result += item.val;
-            } else if (item.operation == "sub") {
-                result -= item.val;
-            } else if (item.operation == "mul") {
-                result *= item.val;
-            } else if (item.operation == "div") {
-                if (item.val != 0) {
-                    result /= item.val;
-                } else {
-                    std::cerr << "[ERROR] Division by zero — skipping " << item.val << ".\n";
-                }
-            } else {
-                std::cerr << "[ERROR] Unrecognized operation \"" << item.operation << "\" — skipping.\n";
-            }
-
             buffer.erase(buffer.begin());
+        } 
+        
+        uniqueLock.unlock();
+
+        if (item.operation == "stop") {
+            std::cout << "[INFO] 'stop' received - queue flushed, shutting down.\n";
+            break;
+        }
+        
+        if (item.operation == "add") {
+            result += item.val;
+        } else if (item.operation == "sub") {
+            result -= item.val;
+        } else if (item.operation == "mul") {
+            result *= item.val;
+        } else if (item.operation == "div") {
+            if (item.val != 0) {
+                result /= item.val;
+            } else {
+                std::cerr << "[ERROR] Division by zero — skipping " << item.val << ".\n";
+            }
+        } else {
+            std::cerr << "[ERROR] Unrecognized operation \"" << item.operation << "\" — skipping.\n";
         }
 
         std::cout << "[RESULT] " << item.operation << " " << item.val << " -> result = " << result << "\n";    
-        uniqueLock.unlock();
-        cv.notify_one();
     }
 }
 
