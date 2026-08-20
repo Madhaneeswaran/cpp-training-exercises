@@ -2,15 +2,15 @@ CXX		 := g++
 CXXFLAGS := -std=c++17 -Wall -Wextra
 OUT_DIR  := output
 
-SRCS     := $(wildcard *.cpp)
+SRCS     := $(shell find . -name "*.cpp")
 TARGETS  := $(patsubst %.cpp, $(OUT_DIR)/%.exe, $(SRCS))
 
-all: $(OUT_DIR) $(TARGETS) 
+.PHONY: all clean
 
-$(OUT_DIR):
-	mkdir -p $(OUT_DIR)
+all: $(TARGETS) 
 
 $(OUT_DIR)/%.exe: %.cpp
+	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) $< -o $@
 
 clean:
