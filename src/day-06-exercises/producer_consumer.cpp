@@ -77,10 +77,6 @@ void consumer() {
             buffer.erase(buffer.begin());
         }
 
-        if (flag) {
-            break;
-        }
-
         std::cout << "[RESULT] " << item.operation << " " << item.val << " -> result = " << result << "\n";    
         uniqueLock.unlock();
         cv.notify_one();
